@@ -1,12 +1,16 @@
 import { configureStore } from '@reduxjs/toolkit';
 
 import { exchangeRatesApi } from './exchangeRatesApi';
-// import exchangeRatesSlice from './exchangeRatesSlice';
+import requestCounterSlice from './requestCounterSlice';
 
-export default configureStore({
+const store = configureStore({
   reducer: {
     [exchangeRatesApi.reducerPath]: exchangeRatesApi.reducer,
-    // exchangeRatesSlice,
+    requestCounterSlice,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(exchangeRatesApi.middleware),
 });
+
+export type RootStateType = ReturnType<typeof store.getState>
+
+export default store;

@@ -57,8 +57,7 @@ const Controls: FC = () => {
 
   return (
     <div className="container">
-      <div>
-
+      <div className='controls'>
         <div>
           <div>
             <input
@@ -95,7 +94,7 @@ const Controls: FC = () => {
           </div>
         </div>
         <div>
-          <div>
+          <div className='date-input-group'>
             <label htmlFor='from'>Дата с</label>
             <input
               type="date"
@@ -103,7 +102,7 @@ const Controls: FC = () => {
               onChange={(e) => { handleFromDate(e); }}
             />
           </div>
-          <div>
+          <div className='date-input-group'>
             <label htmlFor='till'>Дата по</label>
             <input
               type="date"
