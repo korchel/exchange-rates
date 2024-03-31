@@ -1,11 +1,14 @@
 import React from 'react';
-import './App.css';
+import { Provider } from 'react-redux';
+
+import DiagramControls from './components/DiagramControls';
+import store from './store';
 
 const App: React.FC = () => {
   return (
-    <div className="App">
-     <p>hello</p>
-    </div>
+    <Provider store={store}>
+      <DiagramControls />
+    </Provider>
   );
 };
 
