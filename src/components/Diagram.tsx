@@ -1,8 +1,14 @@
-import React, { type FC } from 'react';
+import React from 'react';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 
-const Diagram: FC = () => {
+import { type ICurrenciesData } from '../types/types';
+
+interface IDiagramProps {
+  data: ICurrenciesData,
+  dates: string[],
+}
+const Diagram = ({ data, dates }: IDiagramProps): JSX.Element => {
   const oprions: Highcharts.Options = {
     title: {
       text: 'Курс рубля'
@@ -11,16 +17,28 @@ const Diagram: FC = () => {
       title: {
         text: 'Дата',
       },
-      categories: ['1', '2', '3', '4', '5', '6', '7', '8']
+      categories: dates,
     },
     yAxis: {
       title: {
         text: 'Рубли',
       },
+      visible: true, // ??
     },
     series: [{
+      name: 'EUR',
       type: 'line',
-      data: [1, 2, 3, 4, 5, 6, 7, 8]
+      data: data.eur,
+    },
+    {
+      name: 'USD',
+      type: 'line',
+      data: data.usd,
+    },
+    {
+      name: 'CNY',
+      type: 'line',
+      data: data.cny,
     }]
   };
   return (

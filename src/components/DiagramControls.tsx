@@ -19,7 +19,7 @@ const Controls: FC = () => {
   const [triggerGetCurrencyRate] = getCurrencyRate();
 
   const [data, setData] = useState<ICurrenciesData>({ eur: [], usd: [], cny: [] });
-  console.log(data);
+  const [dates, setDates] = useState<string[]>([]);
 
   const [chosenCurrencies, setChosenCurrencies] = useState<ICheckboxState>({ eur: false, usd: false, cny: false });
 
@@ -30,7 +30,8 @@ const Controls: FC = () => {
     const dates = getDates(fromDate, tillDate);
     const getResponses = async (currency: keyof ICheckboxState): Promise<void> => {
       const promises = dates.map(async (date) => await triggerGetCurrencyRate({ date, currency })
-        .then((response) => response.data?.[currency].rub));
+        .then((response) => response.data[currency].rub)
+        .catch(() => null));
       const responses = await Promise.all(promises);
       setData((data) => ({ ...data, [currency]: responses }));
     };
@@ -41,6 +42,7 @@ const Controls: FC = () => {
         setData((data) => ({ ...data, [currency]: [] }));
       }
     }
+    setDates(dates);
   }, [fromDate, tillDate, chosenCurrencies]);
 
   const handleCheckbox = (event: ChangeEvent<HTMLInputElement>): void => {
@@ -112,7 +114,7 @@ const Controls: FC = () => {
           </div>
         </div>
       </div>
-      <Diagram />
+      <Diagram data={data} dates={dates}/>
     </div>
   );
 };
