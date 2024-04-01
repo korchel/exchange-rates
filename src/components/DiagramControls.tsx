@@ -61,39 +61,21 @@ const Controls: FC = () => {
     <div className="container">
       <div className='controls'>
         <div>
-          <div>
-            <input
-              type="checkbox"
-              name="currencies"
-              id="eur"
-              value="eur"
-              onChange={(event) => { handleCheckbox(event); }}
-              checked={chosenCurrencies.eur}
-            />
-            <label htmlFor="eur">Евро</label>
-          </div>
-          <div>
-            <input
-              type="checkbox"
-              name="currencies"
-              id="usd"
-              value="usd"
-              onChange={(event) => { handleCheckbox(event); }}
-              checked={chosenCurrencies.usd}
-            />
-            <label htmlFor="usd">Доллар</label>
-          </div>
-          <div>
-            <input
-              type="checkbox"
-              name="currencies"
-              id="cny"
-              value="cny"
-              onChange={(event) => { handleCheckbox(event); }}
-              checked={chosenCurrencies.cny}
-            />
-            <label htmlFor="cny">Юань</label>
-          </div>
+          {
+            Object.keys(data).map((currency) => (
+              <div key={currency}>
+                <input
+                  type="checkbox"
+                  name="currencies"
+                  id={currency}
+                  value={currency}
+                  onChange={(event) => { handleCheckbox(event); }}
+                  checked={chosenCurrencies[currency as keyof ICheckboxState]}
+                />
+                <label htmlFor={currency}>{currency.toUpperCase()}</label>
+              </div>
+            ))
+          }
         </div>
         <div>
           <div className='date-input-group'>
