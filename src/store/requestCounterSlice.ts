@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-
+import { exchangeRatesApi } from './exchangeRatesApi';
 import type { RootStateType } from './index';
 
 const initialState = {
@@ -9,13 +9,14 @@ const initialState = {
 const requesCounterSlice = createSlice({
   name: 'counter',
   initialState,
-  reducers: {
-    increment: (state) => {
+  reducers: {},
+  extraReducers: (builder) => {
+    builder.addMatcher(exchangeRatesApi.endpoints.getCurrencyRate.matchFulfilled, (state) => {
       state.counter += 1;
-    }
-  },
+    });
+  }
 });
 
 export const getCounter = (state: RootStateType): number => state.requestCounterSlice.counter;
-export const { increment } = requesCounterSlice.actions;
+
 export default requesCounterSlice.reducer;

@@ -1,17 +1,20 @@
 import React, { useState, useEffect, type FC, type ChangeEvent } from 'react';
+import Form from 'react-bootstrap/Form';
+import { useSelector } from 'react-redux';
 
 import { useLazyGetCurrencyRateQuery as getCurrencyRate } from '../store/exchangeRatesApi';
 import { type ICheckboxState, type ICurrenciesData } from '../types/types';
 import Diagram from './Diagram';
 import getDates from '../auxiliaryFunctions/getDates';
 import stringifyDate from '../auxiliaryFunctions/stringifyDate';
+import { getCounter } from '../store/requestCounterSlice';
 
 const today = stringifyDate(new Date());
 
 const Controls: FC = () => {
   const [triggerGetCurrencyRate] = getCurrencyRate();
 
-  // const [dateError, setDateError] = useState(false);
+  const counter = useSelector(getCounter);
 
   const [data, setData] = useState<ICurrenciesData>({ eur: [], usd: [], cny: [] });
   const [dates, setDates] = useState<string[]>([]);
@@ -20,15 +23,6 @@ const Controls: FC = () => {
 
   const [fromDate, setFromDate] = useState<string>('');
   const [tillDate, setTillDate] = useState<string>('');
-
-  // useEffect(() => {
-  //   if (tillDate && tillDate <= fromDate) {
-  //     setDateError(true);
-  //   }
-  //   return () => {
-  //     setDateError(false);
-  //   }
-  // });
 
   useEffect(() => {
     const dates: string[] = getDates(fromDate, tillDate);
@@ -53,11 +47,11 @@ const Controls: FC = () => {
     setChosenCurrencies({ ...chosenCurrencies, [event.target.value]: event.target.checked });
   };
 
-  const handleFromDate = (e: ChangeEvent<HTMLInputElement>): void => {
+  const handleFromDate = (e): void => {
     setFromDate(e.target.value);
   };
 
-  const handleTillDate = (e: ChangeEvent<HTMLInputElement>): void => {
+  const handleTillDate = (e): void => {
     setTillDate(e.target.value);
   };
 
@@ -84,7 +78,7 @@ const Controls: FC = () => {
         <div>
           <div className='date-input-group'>
             <label htmlFor='from'>Дата с</label>
-            <input
+            <Form.Control
               type="date"
               id="from"
               onChange={(e) => { handleFromDate(e); }}
@@ -104,7 +98,8 @@ const Controls: FC = () => {
           </div>
         </div>
       </div>
-      <Diagram data={data} dates={dates}/>
+      <Diagram data={data} dates={dates} />
+      <p>{counter}</p>
     </div>
   );
 };
