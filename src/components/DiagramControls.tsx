@@ -3,20 +3,15 @@ import React, { useState, useEffect, type FC, type ChangeEvent } from 'react';
 import { useLazyGetCurrencyRateQuery as getCurrencyRate } from '../store/exchangeRatesApi';
 import { type ICheckboxState, type ICurrenciesData } from '../types/types';
 import Diagram from './Diagram';
+import getDates from '../auxiliaryFunctions/getDates';
+import stringifyDate from '../auxiliaryFunctions/stringifyDate';
 
-const getDates = (start: string, end: string): string[] => {
-  const result: string[] = [];
-  for (let d = new Date(start); d <= new Date(end); d.setDate(d.getDate() + 1)) {
-    const year = d.getFullYear();
-    const month = d.getMonth() + 1;
-    const day = d.getDate();
-    result.push(`${year}-${month > 9 ? month : `0${month}`}-${day > 9 ? day : `0${day}`}`);
-  }
-  return result;
-};
+const today = stringifyDate(new Date());
 
 const Controls: FC = () => {
   const [triggerGetCurrencyRate] = getCurrencyRate();
+
+  // const [dateError, setDateError] = useState(false);
 
   const [data, setData] = useState<ICurrenciesData>({ eur: [], usd: [], cny: [] });
   const [dates, setDates] = useState<string[]>([]);
@@ -26,10 +21,19 @@ const Controls: FC = () => {
   const [fromDate, setFromDate] = useState<string>('');
   const [tillDate, setTillDate] = useState<string>('');
 
+  // useEffect(() => {
+  //   if (tillDate && tillDate <= fromDate) {
+  //     setDateError(true);
+  //   }
+  //   return () => {
+  //     setDateError(false);
+  //   }
+  // });
+
   useEffect(() => {
-    const dates = getDates(fromDate, tillDate);
+    const dates: string[] = getDates(fromDate, tillDate);
     const getResponses = async (currency: keyof ICheckboxState): Promise<void> => {
-      const promises = dates.map(async (date) => await triggerGetCurrencyRate({ date, currency })
+      const promises = dates.map(async (date: string) => await triggerGetCurrencyRate({ date, currency })
         .then((response) => response.data[currency].rub)
         .catch(() => null));
       const responses = await Promise.all(promises);
@@ -84,6 +88,8 @@ const Controls: FC = () => {
               type="date"
               id="from"
               onChange={(e) => { handleFromDate(e); }}
+              min="2024-03-01"
+              max={today}
             />
           </div>
           <div className='date-input-group'>
@@ -92,6 +98,8 @@ const Controls: FC = () => {
               type="date"
               id="till"
               onChange={(e) => { handleTillDate(e); }}
+              min={fromDate}
+              max={today}
             />
           </div>
         </div>

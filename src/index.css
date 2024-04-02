@@ -23,18 +23,30 @@ code {
   display: flex;
   flex-direction: column;
   justify-content: space-around;
-  width: 200px;
+  width: 250px;
   height: 400px;
   padding: 20px;
 }
 
 .date-input-group {
+  position: relative;
   display: flex;
   justify-content: space-between;
   margin: 20px 0;
 }
 
-.diagram {
-
+.date-input-group input {
+  width: 150px;
 }
 
+/* .danger {
+  border-color: red;
+}
+
+.error-message {
+  position: absolute;
+  top: -15px;
+  margin: 0;
+  color: red;
+  font-size: 0.7em;
+} */
