@@ -8,7 +8,7 @@ interface IDiagramProps {
   data: ICurrenciesData,
   dates: string[],
 }
-const Diagram = ({ data, dates }: IDiagramProps): JSX.Element => {
+const Diagram: React.FC<IDiagramProps> = ({ data, dates }) => {
   const oprions: Highcharts.Options = {
     title: {
       text: 'Курс рубля'
@@ -23,7 +23,6 @@ const Diagram = ({ data, dates }: IDiagramProps): JSX.Element => {
       title: {
         text: 'Рубли',
       },
-      visible: true, // ??
     },
     series: [{
       name: 'EUR',
@@ -39,7 +38,10 @@ const Diagram = ({ data, dates }: IDiagramProps): JSX.Element => {
       name: 'CNY',
       type: 'line',
       data: data.cny,
-    }]
+    }],
+    accessibility: {
+      enabled: false,
+    },
   };
   return (
     <div className="col-12 col-md-8">

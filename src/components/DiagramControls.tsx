@@ -1,6 +1,7 @@
 import React, { useState, useEffect, type FC, type ChangeEvent } from 'react';
 import Form from 'react-bootstrap/Form';
 import { useSelector } from 'react-redux';
+import { subDays, format } from 'date-fns';
 
 import { useLazyGetCurrencyRateQuery as getCurrencyRate } from '../store/exchangeRatesApi';
 import { type ICheckboxState, type ICurrenciesData } from '../types/types';
@@ -10,6 +11,7 @@ import stringifyDate from '../auxiliaryFunctions/stringifyDate';
 import { getCounter } from '../store/requestCounterSlice';
 
 const today = stringifyDate(new Date());
+const weekAgo = format(subDays(today, 7), 'yyyy-MM-dd');
 
 const Controls: FC = () => {
   const [triggerGetCurrencyRate] = getCurrencyRate();
@@ -21,13 +23,13 @@ const Controls: FC = () => {
 
   const [chosenCurrencies, setChosenCurrencies] = useState<ICheckboxState>({ eur: false, usd: false, cny: false });
 
-  const [fromDate, setFromDate] = useState<string>('');
-  const [tillDate, setTillDate] = useState<string>('');
+  const [fromDate, setFromDate] = useState<string>(weekAgo);
+  const [tillDate, setTillDate] = useState<string>(today);
 
   useEffect(() => {
     const dates: string[] = getDates(fromDate, tillDate);
     const getResponses = async (currency: keyof ICheckboxState): Promise<void> => {
-      const promises = dates.map(async (date: string) => await triggerGetCurrencyRate({ date, currency })
+      const promises = dates.map(async (date: string) => await triggerGetCurrencyRate({ date, currency }, true)
         .then((response) => response.data[currency].rub)
         .catch(() => null));
       const responses = await Promise.all(promises);
@@ -87,16 +89,18 @@ const Controls: FC = () => {
                   onChange={(e) => { handleFromDate(e); }}
                   min="2024-03-01"
                   max={today}
+                  value={fromDate}
                 />
               </Form.Group>
               <Form.Group className="my-1">
-                <Form.Label className="m-0" htmlFor='from'>Дата с</Form.Label>
+                <Form.Label className="m-0" htmlFor='from'>Дата по</Form.Label>
                 <Form.Control
                   type="date"
                   id="till"
                   onChange={(e) => { handleTillDate(e); }}
                   min={fromDate}
                   max={today}
+                  value={tillDate}
                 />
               </Form.Group>
             </Form>

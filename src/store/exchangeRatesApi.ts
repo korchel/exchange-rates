@@ -7,7 +7,7 @@ export const exchangeRatesApi = createApi({
     getCurrencyRate: builder.query({
       query: ({ date, currency }) => `currency-api@${date}/v1/currencies/${currency}.json`,
     }),
-  })
+  }),
 });
 
 export const {
