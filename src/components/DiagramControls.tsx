@@ -56,50 +56,57 @@ const Controls: FC = () => {
   };
 
   return (
-    <div className="container">
-      <div className='controls'>
-        <div>
-          {
-            Object.keys(data).map((currency) => (
-              <div key={currency}>
-                <input
-                  type="checkbox"
-                  name="currencies"
-                  id={currency}
-                  value={currency}
-                  onChange={(event) => { handleCheckbox(event); }}
-                  checked={chosenCurrencies[currency as keyof ICheckboxState]}
+    <div className="vh-100  d-flex flex-column justify-content-center">
+      <div className="container border rounded shadow-sm p-3">
+        <div className="row">
+          <div className='controls col-12 col-md-4 d-flex flex-column justify-content-around'>
+            <Form>
+              {
+                Object.keys(data).map((currency) => (
+                  <Form.Group key={currency}>
+                    <Form.Check
+                      inline
+                      type="checkbox"
+                      name="currencies"
+                      id={currency}
+                      value={currency}
+                      onChange={(event) => { handleCheckbox(event); }}
+                      checked={chosenCurrencies[currency as keyof ICheckboxState]}
+                    />
+                    <Form.Label htmlFor={currency}>{currency.toUpperCase()}</Form.Label>
+                  </Form.Group>
+                ))
+              }
+            </Form>
+            <Form>
+              <Form.Group className="my-1">
+                <Form.Label className="m-0" htmlFor='from'>Дата с</Form.Label>
+                <Form.Control
+                  type="date"
+                  id="from"
+                  onChange={(e) => { handleFromDate(e); }}
+                  min="2024-03-01"
+                  max={today}
                 />
-                <label htmlFor={currency}>{currency.toUpperCase()}</label>
-              </div>
-            ))
-          }
+              </Form.Group>
+              <Form.Group className="my-1">
+                <Form.Label className="m-0" htmlFor='from'>Дата с</Form.Label>
+                <Form.Control
+                  type="date"
+                  id="till"
+                  onChange={(e) => { handleTillDate(e); }}
+                  min={fromDate}
+                  max={today}
+                />
+              </Form.Group>
+            </Form>
+          </div>
+          <Diagram data={data} dates={dates} />
         </div>
-        <div>
-          <div className='date-input-group'>
-            <label htmlFor='from'>Дата с</label>
-            <Form.Control
-              type="date"
-              id="from"
-              onChange={(e) => { handleFromDate(e); }}
-              min="2024-03-01"
-              max={today}
-            />
-          </div>
-          <div className='date-input-group'>
-            <label htmlFor='till'>Дата по</label>
-            <input
-              type="date"
-              id="till"
-              onChange={(e) => { handleTillDate(e); }}
-              min={fromDate}
-              max={today}
-            />
-          </div>
+        <div className="row mt-3 border-top">
+          <p className="mb-0">Число запросов в API: {counter}</p>
         </div>
       </div>
-      <Diagram data={data} dates={dates} />
-      <p>{counter}</p>
     </div>
   );
 };
