@@ -7,10 +7,9 @@ import { useLazyGetCurrencyRateQuery as getCurrencyRate } from '../store/exchang
 import { type ICheckboxState, type ICurrenciesData } from '../types/types';
 import Diagram from './Diagram';
 import getDates from '../auxiliaryFunctions/getDates';
-import stringifyDate from '../auxiliaryFunctions/stringifyDate';
 import { getCounter } from '../store/requestCounterSlice';
 
-const today = stringifyDate(new Date());
+const today = format(new Date(), 'yyyy-MM-dd');
 const weekAgo = format(subDays(today, 7), 'yyyy-MM-dd');
 
 const Controls: FC = () => {
