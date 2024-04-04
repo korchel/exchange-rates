@@ -1,9 +1,9 @@
 ### How to install:  
 
-git clone https://github.com/korchel/exchange-rates.git
-npm install
-cd exchange-rates
-npm start
+* git clone https://github.com/korchel/exchange-rates.git
+* cd exchange-rates
+* npm install
+* npm start
 
 _____
 
